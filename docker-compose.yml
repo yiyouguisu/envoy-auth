@@ -1,0 +1,43 @@
+version: '3'
+services:
+
+  front-envoy:
+    build:
+      context: ./
+      dockerfile: Dockerfile-frontenvoy
+    networks:
+      - envoy-auth-network
+    expose:
+      - "80"
+      - "9901"
+    ports:
+      - "8081:80"
+      - "9901:9901"
+
+  service:
+    build:
+      context: ./
+      dockerfile: Dockerfile-service
+    networks:
+      envoy-auth-network:
+        aliases:
+          - service1
+    environment:
+      - SERVICE_NAME=1
+    expose:
+      - "80"
+
+  extauth:
+    build:
+      context: ./
+      dockerfile: Dockerfile-extauth
+    networks:
+      envoy-auth-network:
+        aliases:
+          - extauth
+    expose:
+      - "4000"
+    ports:
+      - "4000:4000"
+networks:
+  envoy-auth-network: {}

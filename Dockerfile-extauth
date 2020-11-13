@@ -1,0 +1,6 @@
+FROM frolvlad/alpine-glibc
+
+ADD ./extauth /
+RUN chmod u+x /extauth
+
+CMD /extauth

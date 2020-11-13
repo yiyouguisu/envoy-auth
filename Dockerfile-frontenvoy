@@ -1,0 +1,11 @@
+FROM frolvlad/alpine-glibc
+
+RUN apk upgrade && apk add curl
+
+ADD ./envoy /
+RUN chmod u+x /envoy
+
+ADD ./front-envoy.yaml /etc/
+
+
+CMD /envoy -l debug -c /etc/front-envoy.yaml --service-cluster front-proxy
